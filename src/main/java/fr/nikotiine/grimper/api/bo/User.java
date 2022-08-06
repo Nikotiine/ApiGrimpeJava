@@ -1,6 +1,8 @@
 package fr.nikotiine.grimper.api.bo;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private int idUser;
     private String nickName;

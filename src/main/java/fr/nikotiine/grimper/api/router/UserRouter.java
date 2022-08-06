@@ -2,30 +2,32 @@ package fr.nikotiine.grimper.api.router;
 
 import fr.nikotiine.grimper.api.bo.Token;
 import fr.nikotiine.grimper.api.bo.User;
+import fr.nikotiine.grimper.api.controller.TokenMidlewareContoller;
 import fr.nikotiine.grimper.api.controller.UserController;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.List;
 
-@Path("/user")
+@Path("/user/{id : \\d}")
 public class UserRouter {
     UserController userController = UserController.getInstance();
+    TokenMidlewareContoller midlewareContoller = new TokenMidlewareContoller();
     @GET
-
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProfil(@HeaderParam("Authorization")String token){
-      User user =  userController.getProfil(1);
-      String[] authorization = token.split("\\s");
-        for (String s:authorization
-             ) {
-            System.out.println(s);
+    public Response getProfil(@HeaderParam("Authorization") String token , @PathParam("id")int idUser) {
+        User user = null;
+        String[] authorization = token.split("\\s");
+        boolean acces = midlewareContoller.verifyToken(authorization[1]);
+        if(acces){
+            try {
+                user = userController.getProfil(idUser);
+            } catch (Exception e) {
+              throw new RuntimeException(e);
+            }
         }
-      return Response.status(Response.Status.OK).entity(user).build();
+        return Response.status(Response.Status.OK).entity(user).build();
     }
 }

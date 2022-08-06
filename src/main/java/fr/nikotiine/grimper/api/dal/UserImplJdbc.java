@@ -17,7 +17,7 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
     private final String FIND_ALL_USER="SELECT * FROM USERS";
     private final String FIND_NICK_NAME="SELECT COUNT(*) as total FROM USERS WHERE nick_name=?";
     private final String FIND_EMAIL="SELECT COUNT(*) as total FROM USERS WHERE email=?";
-    private final String FIND_PASSWORD="SELECT password FROM USERS WHERE nick_name=?";
+    private final String FIND_PASSWORD="SELECT id_user,password FROM USERS WHERE nick_name=?";
     private final String CREATE_USER="INSERT INTO USERS (nick_name, last_name, first_name, email, password, age, sex) VALUES (?,?,?,?,?,?,?)";
 
     @Override
@@ -121,6 +121,7 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
             rs = ps.executeQuery();
             if (rs.next()){
                 String hashPassword = rs.getString("password");
+                user.setIdUser(rs.getInt("id_user"));
                 if(!BCrypt.checkpw(user.getPassword(),hashPassword)){
                     throw new ApiException(CodeErrorDal.PASSWORD_INVALIDE);
                 }
@@ -128,8 +129,8 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-       String generateToken =  jjwt.generator(user.getNickName());
-        return new Token(generateToken);
+        String generateToken =  jjwt.generator(user.getNickName(),user.getIdUser());
+        return new Token(generateToken,user.getIdUser());
 
     }
 }
