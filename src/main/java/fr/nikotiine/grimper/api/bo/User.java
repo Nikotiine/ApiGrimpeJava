@@ -1,6 +1,9 @@
 package fr.nikotiine.grimper.api.bo;
 
 import java.io.Serializable;
+import java.sql.Date;
+
+
 
 public class User implements Serializable {
 
@@ -10,7 +13,7 @@ public class User implements Serializable {
     private String firstName;
     private String email;
     private String password;
-    private int age;
+    private Date birthday;
     private char sex;
     private boolean admin;
 
@@ -22,17 +25,17 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public User(String nickName, String lastName, String firstName, String email, String password, int age, char sex) {
+    public User(String nickName, String lastName, String firstName, String email, String password, Date birthday, char sex) {
         this(nickName,password);
         this.lastName = lastName;
         this.firstName = firstName;
         this.email=email;
-        this.age = age;
+        this.birthday = birthday;
         this.sex = sex;
     }
 
-    public User(int idUser, String nickName, String lastName, String firstName ,String email,String password, int age, char sex, boolean admin) {
-        this(nickName,lastName,firstName,email,password,age,sex);
+    public User(int idUser, String nickName, String lastName, String firstName ,String email,String password, Date birthday, char sex, boolean admin) {
+        this(nickName,lastName,firstName,email,password,birthday,sex);
         this.idUser = idUser;
         this.admin = admin;
     }
@@ -69,12 +72,12 @@ public class User implements Serializable {
         this.firstName = firstName;
     }
 
-    public int getAge() {
-        return age;
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     public char getSex() {

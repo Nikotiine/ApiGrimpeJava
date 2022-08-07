@@ -6,10 +6,8 @@ import fr.nikotiine.grimper.api.bo.User;
 import fr.nikotiine.grimper.api.dal.token.TokenGenerator;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +16,11 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
     private final String FIND_NICK_NAME="SELECT COUNT(*) as total FROM USERS WHERE nick_name=?";
     private final String FIND_EMAIL="SELECT COUNT(*) as total FROM USERS WHERE email=?";
     private final String FIND_PASSWORD="SELECT id_user,password FROM USERS WHERE nick_name=?";
-    private final String CREATE_USER="INSERT INTO USERS (nick_name, last_name, first_name, email, password, age, sex) VALUES (?,?,?,?,?,?,?)";
+    private final String CREATE_USER="INSERT INTO USERS (nick_name, last_name, first_name, email, password, birthday, sex) VALUES (?,?,?,?,?,?,?)";
 
     @Override
     public void findOrCreate(User user) throws ApiException {
+        System.out.println("find or create");
         PreparedStatement ps = null;
         ResultSet rs = null;
         boolean findNickName = findInDb(this.FIND_NICK_NAME,user.getNickName());
@@ -40,12 +39,13 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
             ps.setString(4,user.getEmail());
             String hashPassword = BCrypt.hashpw(user.getPassword(),BCrypt.gensalt());
             ps.setString(5,hashPassword);
-            ps.setInt(6,user.getAge());
+            ps.setDate(6, user.getBirthday());
             ps.setNString(7,String.valueOf(user.getSex()));
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
-            while (rs.next()){
+             if (rs.next()){
                 user.setIdUser(rs.getInt(1));
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -56,6 +56,7 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
 
     @Override
     public List<User> findAll() {
+        System.out.println("find all");
         List<User> allUsers = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -69,10 +70,10 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
                 String firstName = rs.getString("first_name");
                 String email = rs.getString("email");
                 String password = rs.getString("password");
-                int age = rs.getInt("age");
+                Date birthday = rs.getDate("birthday");
                 char sex = rs.getString("sex").charAt(0);
                 boolean admin = rs.getBoolean("admin");
-                User user = new User(idUser,nickName,lastName,firstName,email,password,age,sex,admin);
+                User user = new User(idUser,nickName,lastName,firstName,email,password,birthday,sex,admin);
                 allUsers.add(user);
             }
         } catch (SQLException e) {

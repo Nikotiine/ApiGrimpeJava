@@ -11,10 +11,11 @@ import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.List;
 
-@Path("/user/{id : \\d}")
+@Path("/user")
 public class UserRouter {
     UserController userController = UserController.getInstance();
     TokenMidlewareContoller midlewareContoller = new TokenMidlewareContoller();
+    @Path("/me/{id : \\d}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProfil(@HeaderParam("Authorization") String token , @PathParam("id")int idUser) {
