@@ -15,16 +15,21 @@ public class TokenGenerator {
       return Jwts.builder().setHeaderParam("id",idUser).setSubject(userNickName).signWith(KEY).compact();
     }
 
-    public boolean validateToken(String acces_token){
+    public boolean validateToken(String acces_token , int idUser){
+       boolean isValide = true;
 
        try {
          Jws<Claims> validateToken = Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJws(acces_token);
          String userNickName=  validateToken.getBody().getSubject();
-         int idUser = (int) validateToken.getHeader().get("id");
+         int idUserToken = (int) validateToken.getHeader().get("id");
+         if(idUser != idUserToken){
+             isValide = false;
+         }
+
 
        } catch (JwtException e) {
            return false;
        }
-       return true;
+       return isValide;
     }
 }

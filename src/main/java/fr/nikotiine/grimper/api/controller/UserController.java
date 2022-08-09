@@ -24,17 +24,13 @@ public class UserController {
         return userDao.findAll();
     }
     public User getProfil(int idUser){
-      List<User> allUsers = userCatalogue();
-      User user = new User();
-        for (User u:allUsers
-             ) {
-            if(u.getIdUser()==idUser){
-                user = u;
-            }
-        }
-        return user;
+        return userDao.findByPk(idUser);
     }
     public void createNewUser(User newUser) throws ApiException {
         userDao.findOrCreate(newUser);
+    }
+
+    public void editProfil(User user) {
+        userDao.update(user);
     }
 }

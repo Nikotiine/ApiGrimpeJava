@@ -13,6 +13,7 @@ import java.util.List;
 
 public class UserImplJdbc implements DAO<User>,LoginDao {
     private final String FIND_ALL_USER="SELECT * FROM USERS";
+    private final String FIND_BY_PK = "SELECT * FROM USERS WHERE id_user=?";
     private final String FIND_NICK_NAME="SELECT COUNT(*) as total FROM USERS WHERE nick_name=?";
     private final String FIND_EMAIL="SELECT COUNT(*) as total FROM USERS WHERE email=?";
     private final String FIND_PASSWORD="SELECT id_user,password FROM USERS WHERE nick_name=?";
@@ -52,6 +53,33 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
         }
     }
 
+    @Override
+    public User findByPk(int id) {
+        System.out.println("find by pk");
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        User user = null;
+        try(Connection cnx = ConnectionProvider.getConnection()) {
+            ps = cnx.prepareStatement(this.FIND_BY_PK);
+            ps.setInt(1,id);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                String nickName = rs.getString("nick_name");
+                String lastName = rs.getString("last_name");
+                String firstName = rs.getString("first_name");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                Date birthday = rs.getDate("birthday");
+                char sex = rs.getString("sex").charAt(0);
+                boolean admin = rs.getBoolean("admin");
+                user = new User(id,nickName,lastName,firstName,email,password,birthday,sex,admin);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return user;
+    }
 
 
     @Override

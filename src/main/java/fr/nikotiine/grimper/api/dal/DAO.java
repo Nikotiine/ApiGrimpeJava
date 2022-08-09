@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface DAO<T> {
     void findOrCreate(T object) throws ApiException;
+    T findByPk(int id);
     List<T> findAll();
     void update(T object);
 }
