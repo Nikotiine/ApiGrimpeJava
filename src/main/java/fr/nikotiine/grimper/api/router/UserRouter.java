@@ -1,5 +1,6 @@
 package fr.nikotiine.grimper.api.router;
 
+import fr.nikotiine.grimper.api.ApiException;
 import fr.nikotiine.grimper.api.bo.Token;
 import fr.nikotiine.grimper.api.bo.User;
 import fr.nikotiine.grimper.api.controller.TokenMidlewareContoller;
@@ -42,7 +43,7 @@ public class UserRouter {
     }
 
     @Path("/edit/{id : \\d}")
-    @POST
+    @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response editProfil(@HeaderParam("Authorization") String token , @PathParam("id")int idUser,User user){
@@ -53,8 +54,8 @@ public class UserRouter {
         if(acces){
             try {
                 userController.editProfil(user);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            } catch (ApiException e) {
+                return Response.status(Response.Status.OK).entity(e.getMessage()).build();
             }
             return Response.status(Response.Status.OK).entity(user).build();
         }else {

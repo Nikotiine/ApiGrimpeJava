@@ -30,7 +30,11 @@ public class UserController {
         userDao.findOrCreate(newUser);
     }
 
-    public void editProfil(User user) {
-        userDao.update(user);
+    public void editProfil(User user) throws ApiException {
+       int result =  userDao.update(user);
+       System.out.println("controller edit "+ result);
+       if(result != 1){
+           throw new ApiException(CodeErrorController.UPDATE_FAIL);
+       }
     }
 }

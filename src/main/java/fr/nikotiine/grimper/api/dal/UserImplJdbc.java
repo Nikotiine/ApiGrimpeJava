@@ -19,6 +19,8 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
     private final String FIND_PASSWORD="SELECT id_user,password FROM USERS WHERE nick_name=?";
     private final String CREATE_USER="INSERT INTO USERS (nick_name, last_name, first_name, email, password, birthday, sex) VALUES (?,?,?,?,?,?,?)";
 
+    private final String UPDATE_USER="UPDATE USERS set nick_name=?, last_name=?, first_name=?, email=?, birthday=?, sex=? WHERE id_user=?";
+
     @Override
     public void findOrCreate(User user) throws ApiException {
         System.out.println("find or create");
@@ -111,8 +113,24 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
     }
 
     @Override
-    public void update(User object) {
-
+    public int update(User user) {
+        PreparedStatement ps = null;
+       System.out.println("update user");
+        int result = 0;
+        try(Connection cnx = ConnectionProvider.getConnection()) {
+            ps = cnx.prepareStatement(this.UPDATE_USER);
+            ps.setString(1,user.getNickName());
+            ps.setString(2,user.getLastName());
+            ps.setString(3,user.getFirstName());
+            ps.setString(4,user.getEmail());
+            ps.setDate(5, user.getBirthday());
+            ps.setNString(6,String.valueOf(user.getSex()));
+            ps.setInt(7,user.getIdUser());
+            result = ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 
     private boolean findInDb(String findSqlQuery, String lookupString)  {
