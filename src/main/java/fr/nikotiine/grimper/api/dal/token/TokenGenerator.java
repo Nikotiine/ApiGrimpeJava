@@ -9,7 +9,7 @@ import java.security.Key;
 
 public class TokenGenerator {
   private static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-  //User user = new User(1,"toto","tata","titi","tutu","ert",12,'C',false);
+
 
    public String generator(String userNickName,int idUser){
       return Jwts.builder().setHeaderParam("id",idUser).setSubject(userNickName).signWith(KEY).compact();

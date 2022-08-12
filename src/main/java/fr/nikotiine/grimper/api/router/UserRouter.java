@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 
 @Path("/user")
+
 public class UserRouter {
     UserController userController = UserController.getInstance();
     TokenMidlewareContoller midlewareContoller = new TokenMidlewareContoller();
