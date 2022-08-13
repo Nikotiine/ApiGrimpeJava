@@ -3,6 +3,7 @@ package fr.nikotiine.grimper.api.dal;
 import fr.nikotiine.grimper.api.ApiException;
 import fr.nikotiine.grimper.api.bo.Token;
 import fr.nikotiine.grimper.api.bo.User;
+import fr.nikotiine.grimper.api.bo.UserPassword;
 import fr.nikotiine.grimper.api.dal.token.TokenGenerator;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -19,11 +20,18 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
     private final String FIND_PASSWORD="SELECT id_user,password FROM USERS WHERE nick_name=?";
     private final String CREATE_USER="INSERT INTO USERS (nick_name, last_name, first_name, email, password, birthday, sex) VALUES (?,?,?,?,?,?,?)";
 
-    private final String UPDATE_USER="UPDATE USERS set nick_name=?, last_name=?, first_name=?, email=?, birthday=?, sex=? WHERE id_user=?";
+    private final String UPDATE_USER="UPDATE USERS SET nick_name=?, last_name=?, first_name=?, email=?, birthday=?, sex=? WHERE id_user=?";
+    private final String GET_PASSWORD="SELECT password FROM USERS WHERE id_user=?";
+    private final String CHANGE_PASSWORD="UPDATE USERS SET password=? WHERE id_user=?";
 
+    /**
+     * Methode permetant de creer un nouvel utilisgteur en dbb
+     * Verfier que le pseudo ou le mail ne pas pas deja existant
+     * @param user Un objet User envoie par requette http (JSon)
+     * @throws ApiException Remonte les Erreurs de pseudo ou mail deja existant
+     */
     @Override
     public void findOrCreate(User user) throws ApiException {
-        System.out.println("find or create");
         PreparedStatement ps = null;
         ResultSet rs = null;
         boolean findNickName = findInDb(this.FIND_NICK_NAME,user.getNickName());
@@ -48,16 +56,19 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
             rs = ps.getGeneratedKeys();
              if (rs.next()){
                 user.setIdUser(rs.getInt(1));
-
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Permet de trouver le profil de l'utilsateur par son id
+     * @param id int IdUser
+     * @return Le profil complet de l user
+     */
     @Override
     public User findByPk(int id) {
-        System.out.println("find by pk");
         PreparedStatement ps = null;
         ResultSet rs = null;
         User user = null;
@@ -83,10 +94,12 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
         return user;
     }
 
-
+    /**
+     * Catalogue complet des utilisateurs .
+     * @return la lsite complete des utilisateurs
+     */
     @Override
     public List<User> findAll() {
-        System.out.println("find all");
         List<User> allUsers = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -112,11 +125,20 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
         return allUsers;
     }
 
+    /**
+     * Methode d'update de l utilisateur avec verifie pealable de son mot de passe
+     * @param user les nouvelle data a modifier
+     * @return renvoi un int pour valide le update , exception gere dans le UserController
+     * @throws ApiException Remonte l'erreur de Mauvais mot de passe
+     */
     @Override
-    public int update(User user) {
+    public int update(User user) throws ApiException {
         PreparedStatement ps = null;
-       System.out.println("update user");
+        boolean passwordIsValid = validPassword(user.getPassword(), user.getIdUser());
         int result = 0;
+        if (!passwordIsValid){
+           throw new ApiException(CodeErrorDal.PASSWORD_INVALIDE);
+        }
         try(Connection cnx = ConnectionProvider.getConnection()) {
             ps = cnx.prepareStatement(this.UPDATE_USER);
             ps.setString(1,user.getNickName());
@@ -130,29 +152,18 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         return result;
     }
 
-    private boolean findInDb(String findSqlQuery, String lookupString)  {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        boolean isFind = false;
-        try(Connection cnx = ConnectionProvider.getConnection()){
-            ps = cnx.prepareStatement(findSqlQuery);
-            ps.setString(1,lookupString);
-            rs = ps.executeQuery();
-            while (rs.next()){
-                if(rs.getInt("total")>0){
-                    isFind = true;
-                }
-            }
-            ps.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return isFind;
-    }
 
+
+    /**
+     * Meethode de  login pour l'utilisateur
+     * @param user le pseudo et le mot de passe
+     * @return un Token pour valider le login
+     * @throws ApiException remonte l'erreur de Mauvais mot de passe  ou de mauvais pseudo le cas echeant
+     */
     @Override
     public Token login(User user) throws ApiException {
         PreparedStatement ps = null;
@@ -179,5 +190,84 @@ public class UserImplJdbc implements DAO<User>,LoginDao {
         String generateToken =  jjwt.generator(user.getNickName(),user.getIdUser());
         return new Token(generateToken,user.getIdUser());
 
+    }
+
+    /**
+     * Methode permettant de modifier le mot de passe de l'utilisateur en bdd
+     * @param passwords L'ancien mot de passe ( qui sera verifier pour confirmer le changement )
+     *                  le nouveau mot de passe qui sera crytpe en cas de validation de l'ancie mdp
+     * @param idUser l'id de l'user passer en parametre dans le router
+     * @return un int de resulat si changement ok , traitement de l'erreur dans le UserController
+     * @throws ApiException remonte l'erreur de Mauvais mot de passe le cas echeant
+     */
+    @Override
+    public int changePassword(UserPassword passwords, int idUser) throws ApiException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int res = 0;
+        boolean isValide = validPassword(passwords.getOldPassword(),idUser);
+        if(!isValide){
+            throw new ApiException(CodeErrorDal.PASSWORD_INVALIDE);
+        }
+        try(Connection cnx = ConnectionProvider.getConnection()) {
+            ps = cnx.prepareStatement(this.CHANGE_PASSWORD);
+            String hashPassword = BCrypt.hashpw(passwords.getNewPassword(),BCrypt.gensalt());
+            ps.setString(1,hashPassword);
+            ps.setInt(2,idUser);
+            res = ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return res;
+    }
+
+    /**
+     * Verifie que le mot de passe est valide pour les changement demander par l'utlisateur
+     * @param password son password actuel
+     * @param id l'id de l'user
+     * @return true ou false
+     */
+    private boolean validPassword(String password,int id) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean isValide = false;
+        try(Connection cnx = ConnectionProvider.getConnection()) {
+            ps = cnx.prepareStatement(this.GET_PASSWORD);
+            ps.setInt(1,id);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                String hashPassword = rs.getString("password");
+                isValide = BCrypt.checkpw(password, hashPassword);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return isValide;
+    }
+
+    /**
+     * Methode permettant de savoir si le mail ou le pseudo existe deja en bdd lors de la creation d'un nouvel user
+     * @param findSqlQuery requete sql suivant la recherche
+     * @param lookupString le mail ou le pseudo a comparer
+     * @return true ou false , gestion des cas dans la methode FindOrCreate
+     */
+    private boolean findInDb(String findSqlQuery, String lookupString)  {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        boolean isFind = false;
+        try(Connection cnx = ConnectionProvider.getConnection()){
+            ps = cnx.prepareStatement(findSqlQuery);
+            ps.setString(1,lookupString);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                if(rs.getInt("total")>0){
+                    isFind = true;
+                }
+            }
+            ps.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return isFind;
     }
 }

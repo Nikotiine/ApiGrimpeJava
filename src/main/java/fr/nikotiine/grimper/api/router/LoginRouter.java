@@ -24,6 +24,7 @@ LoginController controller = LoginController.getInstance();
             acces_token =  controller.login(userRequestToLogin);
 
         } catch (ApiException e) {
+            System.out.println("reponse");
             return Response.status(Response.Status.OK).entity(e.getMessage()).build();
         }
         return Response.status(Response.Status.OK).entity(acces_token).build();

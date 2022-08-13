@@ -7,12 +7,13 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
-
+/*
 public class ApiFilter implements ContainerRequestFilter, ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext reqContext) throws IOException {
         System.out.println("-- req info --");
         log(reqContext.getUriInfo(), reqContext.getHeaders());
+
     }
 
     @Override
@@ -25,3 +26,4 @@ public class ApiFilter implements ContainerRequestFilter, ContainerResponseFilte
         headers.entrySet().forEach(h -> System.out.println(h.getKey() + ": " + h.getValue()));
     }
 }
+*/

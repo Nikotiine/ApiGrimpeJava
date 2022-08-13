@@ -1,11 +1,15 @@
 package fr.nikotiine.grimper.api.router;
 
+
 import fr.nikotiine.grimper.api.ApiException;
-import fr.nikotiine.grimper.api.bo.Token;
 import fr.nikotiine.grimper.api.bo.User;
+import fr.nikotiine.grimper.api.bo.UserPassword;
+import fr.nikotiine.grimper.api.bo.utils.ResponseJson;
 import fr.nikotiine.grimper.api.controller.TokenMidlewareContoller;
 import fr.nikotiine.grimper.api.controller.UserController;
 
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -56,12 +60,34 @@ public class UserRouter {
             try {
                 userController.editProfil(user);
             } catch (ApiException e) {
-                return Response.status(Response.Status.OK).entity(e.getMessage()).build();
+                System.out.println(e.getMessage());
+
+               // JsonErrorMessage message = new JsonErrorMessage(e.getMessage());
+                return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
             }
             return Response.status(Response.Status.OK).entity(user).build();
         }else {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
+    }
+    @Path("/new-password/{id : \\d}")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changePassword(@HeaderParam("Authorization") String token , @PathParam("id")int idUser, UserPassword passwords){
+        ResponseJson res = new ResponseJson("Mot de passe modifier avec succes , Merci de vous reconnecter");
+
+        String[] authorization = token.split("\\s");
+        boolean acces = midlewareContoller.verifyToken(authorization[1],idUser);
+        if(acces){
+            try {
+                userController.changePassword(passwords,idUser);
+            } catch (ApiException e) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+            }
+
+        }
+        return Response.status(Response.Status.OK).entity(res).build();
     }
 
 }
