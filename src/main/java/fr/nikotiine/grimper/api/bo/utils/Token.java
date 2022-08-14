@@ -1,4 +1,4 @@
-package fr.nikotiine.grimper.api.bo;
+package fr.nikotiine.grimper.api.bo.utils;
 
 public class Token {
     private String acces_token = "";

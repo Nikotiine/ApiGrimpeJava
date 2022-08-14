@@ -1,7 +1,7 @@
 package fr.nikotiine.grimper.api.router;
 
 import fr.nikotiine.grimper.api.ApiException;
-import fr.nikotiine.grimper.api.bo.Token;
+import fr.nikotiine.grimper.api.bo.utils.Token;
 import fr.nikotiine.grimper.api.bo.User;
 import fr.nikotiine.grimper.api.controller.LoginController;
 
