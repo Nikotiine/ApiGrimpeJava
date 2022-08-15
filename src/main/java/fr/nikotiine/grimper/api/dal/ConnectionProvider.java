@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-abstract class ConnectionProvider {
+public class ConnectionProvider {
     private static DataSource dataSource;
     static {
         Context initContext;

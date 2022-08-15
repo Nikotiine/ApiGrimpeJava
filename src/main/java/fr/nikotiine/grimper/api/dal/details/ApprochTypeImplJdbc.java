@@ -2,7 +2,7 @@ package fr.nikotiine.grimper.api.dal.details;
 
 import fr.nikotiine.grimper.api.ApiException;
 import fr.nikotiine.grimper.api.bo.details.ApprochType;
-import fr.nikotiine.grimper.api.bo.details.Direction;
+import fr.nikotiine.grimper.api.bo.details.Level;
 import fr.nikotiine.grimper.api.dal.ConnectionProvider;
 import fr.nikotiine.grimper.api.dal.DetailDao;
 
@@ -13,38 +13,39 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DirectionImplJdbc implements DetailDao<Direction> {
-    private final String FIND_ALL = "SELECT * FROM DIRECTIONS";
+public class ApprochTypeImplJdbc implements DetailDao<ApprochType> {
+    private final String FIND_ALL = "SELECT * FROM APPROCH_TYPES";
     @Override
-    public void findOrCreate(Direction object) throws ApiException {
+    public void findOrCreate(ApprochType object) throws ApiException {
 
     }
 
     @Override
-    public Direction findByPk(int id) {
+    public ApprochType findByPk(int id) {
         return null;
     }
 
     @Override
-    public List<Direction> findAll() {
+    public List<ApprochType> findAll() {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        List<Direction> directionList = new ArrayList<>();
+        List<ApprochType> approchTypeList = new ArrayList<>();
         try(Connection cnx = ConnectionProvider.getConnection()) {
             ps = cnx.prepareStatement(this.FIND_ALL);
             rs = ps.executeQuery();
             while (rs.next()){
-                Direction direction = new Direction(rs.getInt("id_direction"),rs.getString("direction"));
-                directionList.add(direction);
+                ApprochType approchType = new ApprochType(rs.getInt("id_approch_type"),rs.getString("type"));
+                approchTypeList.add(approchType);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return directionList;
+        return approchTypeList;
     }
 
+
     @Override
-    public int update(Direction object) throws ApiException {
+    public int update(ApprochType object) throws ApiException {
         return 0;
     }
 }

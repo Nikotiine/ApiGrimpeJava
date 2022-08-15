@@ -9,11 +9,12 @@ public class AllDetailList {
     private List<RoutProfil> routProfilList;
     private List<ApprochType> approchTypeList;
     private List<Equipment> equipmentList;
+    private List<EquipmentQuality> equipmentQualityList;
 
     public AllDetailList() {
     }
 
-    public AllDetailList(List<Level> levelList, List<Direction> directionsList, List<RockType> rockTypeList, List<RoutProfil> routProfilList, List<ApprochType> approchTypeList, List<Equipment> equipmentList) {
+    public AllDetailList(List<Level> levelList, List<Direction> directionsList, List<RockType> rockTypeList, List<RoutProfil> routProfilList, List<ApprochType> approchTypeList, List<Equipment> equipmentList ,List<EquipmentQuality> equipmentQualityList) {
         this();
         this.levelList = levelList;
         this.directionsList = directionsList;
@@ -21,6 +22,7 @@ public class AllDetailList {
         this.routProfilList = routProfilList;
         this.approchTypeList = approchTypeList;
         this.equipmentList = equipmentList;
+        this.equipmentQualityList =equipmentQualityList;
     }
 
     public List<Level> getLevelList() {
@@ -69,5 +71,13 @@ public class AllDetailList {
 
     public void setEquipmentList(List<Equipment> equipmentList) {
         this.equipmentList = equipmentList;
+    }
+
+    public List<EquipmentQuality> getEquipmentQualityList() {
+        return equipmentQualityList;
+    }
+
+    public void setEquipmentQualityList(List<EquipmentQuality> equipmentQualityList) {
+        this.equipmentQualityList = equipmentQualityList;
     }
 }
