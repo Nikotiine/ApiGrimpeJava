@@ -28,8 +28,9 @@ public class DetailService {
     private DetailDao rockTypeDao = DaoFactory.rockTypeDao();
     private DetailDao routProfilDao = DaoFactory.routProfilDao();
     private DetailDao equipmentQualityDao = DaoFactory.equipmentQualityDao();
+    private DetailDao averageRoutNumberDao = DaoFactory.averageRoutNumberDao();
 
     public  AllDetailList getAllDetail(){
-        return new AllDetailList(levelDao.findAll(),directionDao.findAll(),rockTypeDao.findAll(),routProfilDao.findAll(),approchTypeDao.findAll(),equipmentDao.findAll(),equipmentQualityDao.findAll());
+        return new AllDetailList(levelDao.findAll(),directionDao.findAll(),rockTypeDao.findAll(),routProfilDao.findAll(),approchTypeDao.findAll(),equipmentDao.findAll(),equipmentQualityDao.findAll(),averageRoutNumberDao.findAll());
     }
 }

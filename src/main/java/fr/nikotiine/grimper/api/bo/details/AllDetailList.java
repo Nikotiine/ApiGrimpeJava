@@ -11,10 +11,12 @@ public class AllDetailList {
     private List<Equipment> equipmentList;
     private List<EquipmentQuality> equipmentQualityList;
 
+    private List<AverageRoutNumber> averageRoutNumberList;
+
     public AllDetailList() {
     }
 
-    public AllDetailList(List<Level> levelList, List<Direction> directionsList, List<RockType> rockTypeList, List<RoutProfil> routProfilList, List<ApprochType> approchTypeList, List<Equipment> equipmentList ,List<EquipmentQuality> equipmentQualityList) {
+    public AllDetailList(List<Level> levelList, List<Direction> directionsList, List<RockType> rockTypeList, List<RoutProfil> routProfilList, List<ApprochType> approchTypeList, List<Equipment> equipmentList ,List<EquipmentQuality> equipmentQualityList ,List<AverageRoutNumber> averageRoutNumberList) {
         this();
         this.levelList = levelList;
         this.directionsList = directionsList;
@@ -23,6 +25,7 @@ public class AllDetailList {
         this.approchTypeList = approchTypeList;
         this.equipmentList = equipmentList;
         this.equipmentQualityList =equipmentQualityList;
+        this.averageRoutNumberList=averageRoutNumberList;
     }
 
     public List<Level> getLevelList() {
@@ -79,5 +82,13 @@ public class AllDetailList {
 
     public void setEquipmentQualityList(List<EquipmentQuality> equipmentQualityList) {
         this.equipmentQualityList = equipmentQualityList;
+    }
+
+    public List<AverageRoutNumber> getAverageRoutNumberList() {
+        return averageRoutNumberList;
+    }
+
+    public void setAverageRoutNumberList(List<AverageRoutNumber> averageRoutNumberList) {
+        this.averageRoutNumberList = averageRoutNumberList;
     }
 }

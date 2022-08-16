@@ -16,4 +16,5 @@ public class DaoFactory {
     }
     public static DetailDao routProfilDao(){return new RoutProfilImplJdbc();}
     public static DetailDao equipmentQualityDao(){return new EquimentQualityImplJdbc();}
+    public static DetailDao averageRoutNumberDao(){return new AverageRoutNumberImplJdbc();}
 }
