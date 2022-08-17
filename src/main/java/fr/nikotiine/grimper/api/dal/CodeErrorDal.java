@@ -6,4 +6,6 @@ abstract class CodeErrorDal {
     public static final String NICK_NAME_INVALIDE = "Pseudo inconnu";
     public static final String PASSWORD_INVALIDE = "Mot de passe invalide";
 
+    public static final String SPOT_EXISTANT = "Spot deja enregister";
+
 }

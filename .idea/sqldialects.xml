@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/fr/nikotiine/grimper/api/dal/ClimbingSpotImplJdbc.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/fr/nikotiine/grimper/api/dal/UserImplJdbc.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/fr/nikotiine/grimper/api/dal/details/ApprochTypeImplJdbc.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/fr/nikotiine/grimper/api/dal/details/LevelImplJdbc.java" dialect="GenericSQL" />
