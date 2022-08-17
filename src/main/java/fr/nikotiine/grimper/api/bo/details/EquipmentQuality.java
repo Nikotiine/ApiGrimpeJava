@@ -7,10 +7,15 @@ public class EquipmentQuality {
     public EquipmentQuality() {
     }
 
-    public EquipmentQuality(int idEquipmentQuality, String quality) {
+    public EquipmentQuality(String quality) {
         this();
-        this.idEquipmentQuality = idEquipmentQuality;
         this.quality = quality;
+    }
+
+    public EquipmentQuality(int idEquipmentQuality, String quality) {
+        this(quality);
+        this.idEquipmentQuality = idEquipmentQuality;
+
     }
 
     public int getIdEquipmentQuality() {

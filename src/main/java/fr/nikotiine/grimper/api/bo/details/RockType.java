@@ -8,10 +8,15 @@ public class RockType {
     public RockType() {
     }
 
-    public RockType(int idRockType, String type) {
+    public RockType(String type) {
         this();
-        this.idRockType = idRockType;
         this.type = type;
+    }
+
+    public RockType(int idRockType, String type) {
+        this(type);
+        this.idRockType = idRockType;
+
     }
 
     public int getIdRockType() {

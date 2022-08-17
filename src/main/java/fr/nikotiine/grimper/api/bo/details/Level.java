@@ -7,10 +7,15 @@ public class Level {
     public Level() {
     }
 
-    public Level(int idLevel, String designation) {
+    public Level(String designation) {
         this();
-        this.idLevel = idLevel;
         this.designation = designation;
+    }
+
+    public Level(int idLevel, String designation) {
+        this(designation);
+        this.idLevel = idLevel;
+
     }
 
     public int getIdLevel() {

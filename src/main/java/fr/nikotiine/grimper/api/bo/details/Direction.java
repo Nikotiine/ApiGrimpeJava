@@ -7,10 +7,15 @@ public class Direction {
     public Direction() {
     }
 
-    public Direction(int idDirections, String direction) {
+    public Direction(String direction) {
         this();
-        this.idDirections = idDirections;
         this.direction = direction;
+    }
+
+    public Direction(int idDirections, String direction) {
+        this(direction);
+        this.idDirections = idDirections;
+
     }
 
     public int getIdDirections() {

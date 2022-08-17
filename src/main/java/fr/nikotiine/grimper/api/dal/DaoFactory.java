@@ -2,12 +2,15 @@ package fr.nikotiine.grimper.api.dal;
 
 import fr.nikotiine.grimper.api.bo.ClimbingSpot;
 import fr.nikotiine.grimper.api.bo.User;
+import fr.nikotiine.grimper.api.dal.JsonResponse.ClimbingSpotDtoImplJdbc;
 import fr.nikotiine.grimper.api.dal.details.*;
 
 public class DaoFactory {
     public static DAO<User> DaoUser(){return new UserImplJdbc();}
     public static DAO<ClimbingSpot> climbingSpotDAO(){return new ClimbingSpotImplJdbc();}
     public static LoginDao loginDao(){return new UserImplJdbc();}
+    public static JsonDao jsonDao(){return new ClimbingSpotDtoImplJdbc();
+    }
 
     public static DetailDao approchTypeDao(){return new ApprochTypeImplJdbc();}
     public static DetailDao directionDao(){return new DirectionImplJdbc();}

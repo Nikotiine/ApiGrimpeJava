@@ -7,10 +7,14 @@ public class AverageRoutNumber {
     public AverageRoutNumber() {
     }
 
-    public AverageRoutNumber(int idAverageRoutNumber, String libelle) {
+    public AverageRoutNumber(String libelle) {
         this();
-        this.idAverageRoutNumber = idAverageRoutNumber;
         this.libelle = libelle;
+    }
+
+    public AverageRoutNumber(int idAverageRoutNumber, String libelle) {
+        this(libelle);
+        this.idAverageRoutNumber = idAverageRoutNumber;
     }
 
     public int getIdAverageRoutNumber() {

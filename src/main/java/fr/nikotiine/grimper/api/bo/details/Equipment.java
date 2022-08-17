@@ -7,10 +7,15 @@ public class Equipment {
     public Equipment() {
     }
 
-    public Equipment(int idEquipment, String libelle) {
+    public Equipment(String libelle) {
         this();
-        this.idEquipment = idEquipment;
         this.libelle = libelle;
+    }
+
+    public Equipment(int idEquipment, String libelle) {
+        this(libelle);
+        this.idEquipment = idEquipment;
+
     }
 
     public int getIdEquipment() {

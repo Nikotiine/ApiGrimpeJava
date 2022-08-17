@@ -36,6 +36,7 @@ public class ClimbingSpot {
   private EquipmentQuality equipmentQuality;
   private RockType rockType;
   private RoutProfil routProfil;
+  private AverageRoutNumber averageRoutNumber;
 
   public ClimbingSpot() {
   }
@@ -66,7 +67,7 @@ public class ClimbingSpot {
     this.secteurs = secteurs;
   }
 
-  public ClimbingSpot(int idSpot, String name, int approachTime,int averageHeight, int nbSecteur, Double latitudeP1, Double longitudeP1, Double latitudeP2, Double longitudeP2, boolean reseau4g, boolean water, boolean toilette, boolean river, List<ClimbingSpotSecteur> secteurs, Level minimumLevel, Level maximumLevel, ApprochType approchType, Direction direction, Equipment equipment, EquipmentQuality equipmentQuality, RockType rockType, RoutProfil routProfil) {
+ /* public ClimbingSpot(int idSpot, String name, int approachTime,int averageHeight, int nbSecteur, Double latitudeP1, Double longitudeP1, Double latitudeP2, Double longitudeP2, boolean reseau4g, boolean water, boolean toilette, boolean river, Level minimumLevel, Level maximumLevel, ApprochType approchType, Direction direction, Equipment equipment, EquipmentQuality equipmentQuality, RockType rockType, RoutProfil routProfil , AverageRoutNumber averageRoutNumber) {
     this.idSpot = idSpot;
     this.name = name;
     this.approachTime = approachTime;
@@ -80,7 +81,6 @@ public class ClimbingSpot {
     this.water = water;
     this.toilette = toilette;
     this.river = river;
-    this.secteurs = secteurs;
     this.minimumLevel = minimumLevel;
     this.maximumLevel = maximumLevel;
     this.approchType = approchType;
@@ -89,7 +89,8 @@ public class ClimbingSpot {
     this.equipmentQuality = equipmentQuality;
     this.rockType = rockType;
     this.routProfil = routProfil;
-  }
+    this.averageRoutNumber =averageRoutNumber;
+  }*/
 
   public int getIdSpot() {
     return idSpot;
@@ -337,5 +338,13 @@ public class ClimbingSpot {
 
   public void setAverageHeight(int averageHeight) {
     this.averageHeight = averageHeight;
+  }
+
+  public AverageRoutNumber getAverageRoutNumber() {
+    return averageRoutNumber;
+  }
+
+  public void setAverageRoutNumber(AverageRoutNumber averageRoutNumber) {
+    this.averageRoutNumber = averageRoutNumber;
   }
 }

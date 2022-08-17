@@ -7,10 +7,14 @@ public class ApprochType {
     public ApprochType() {
     }
 
-    public ApprochType(int idApprochType, String type) {
+    public ApprochType(String type) {
         this();
-        this.idApprochType = idApprochType;
         this.type = type;
+    }
+
+    public ApprochType(int idApprochType, String type) {
+        this(type);
+        this.idApprochType = idApprochType;
     }
 
     public int getIdApprochType() {

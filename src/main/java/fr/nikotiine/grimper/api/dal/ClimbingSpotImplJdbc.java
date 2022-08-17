@@ -3,19 +3,23 @@ package fr.nikotiine.grimper.api.dal;
 import fr.nikotiine.grimper.api.ApiException;
 import fr.nikotiine.grimper.api.bo.ClimbingSpot;
 import fr.nikotiine.grimper.api.bo.ClimbingSpotSecteur;
+import fr.nikotiine.grimper.api.bo.details.*;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClimbingSpotImplJdbc implements DAO<ClimbingSpot> {
     private final String CREATE_SPOT ="INSERT INTO CLIMBING_SPOT (name, id_minimum_level, id_maximum_level, average_height, approach_time, id_approach_type, id_equipment, id_equipment_quality, id_direction, id_rock_type, id_rout_profil, id_average_rout, nb_secteurs, latitude_P1, longitude_P1, latitude_P2, longitude_P2, reseau_4g, water, toilette, river) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
     private final String ADD_SECTEUR ="INSERT INTO SECTEURS (name,id_spot) VALUES (?,?)";
-    private final String FIND_SPOT="SELECT COUNT(*) as total FROM CLIMBING_SPOT WHERE name=?";
+
+    private final String FIND_ALL_SPOT ="SELECT id_spot,name,average_height,approach_time,nb_secteurs,direction,E.libelle as equipment,ARN.libelle as averageRout ,quality,profil,LVS.designation as maximumLevel,LVS2.designation as minimumLevel,RT.type as rockType,ATS.type as approachType,latitude_P1,longitude_P1,latitude_P2,longitude_P2,reseau_4g,toilette,water,river FROM CLIMBING_SPOT CS JOIN DIRECTIONS D on CS.id_direction = D.id_direction JOIN EQUIPMENTS E on CS.id_equipment = E.id_equipment JOIN AVERAGE_ROUT_NUMBERS ARN on CS.id_average_rout = ARN.id_average_rout JOIN EQUIPMENTS_QUALITY EQ on CS.id_equipment_quality = EQ.id_equipment_quality JOIN ROUT_PROFILS RP on CS.id_rout_profil = RP.id_rout_profil JOIN LEVELS LVS on CS.id_maximum_level = LVS.id_level JOIN LEVELS LVS2 on CS.id_minimum_level = LVS2.id_level JOIN ROCK_TYPES RT on CS.id_rock_type = RT.id_rock_types JOIN APPROCH_TYPES ATS on CS.id_approach_type = ATS.id_approch_type";
+    private final String FIND_IS_EXIST_SPOT="SELECT COUNT(*) as total FROM CLIMBING_SPOT WHERE name=?";
     @Override
     public void findOrCreate(ClimbingSpot spot) throws ApiException {
         PreparedStatement ps = null;
         ResultSet rs = null;
-        boolean findSpot = findInDb(this.FIND_SPOT,spot.getName());
+        boolean findSpot = findInDb(this.FIND_IS_EXIST_SPOT,spot.getName());
         if(findSpot){
             throw new ApiException(CodeErrorDal.SPOT_EXISTANT);
         }
@@ -76,6 +80,42 @@ public class ClimbingSpotImplJdbc implements DAO<ClimbingSpot> {
 
     @Override
     public List<ClimbingSpot> findAll() {
+      /*  PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<ClimbingSpot> allClimbingSpot =new ArrayList<>();
+        try(Connection cnx = ConnectionProvider.getConnection()) {
+            ps = cnx.prepareStatement(this.FIND_ALL_SPOT);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                int idSpot = rs.getInt("id_spot");
+                String name = rs.getString("name");
+                int averageHeight = rs.getInt("average_height");
+                int approachTime = rs.getInt("approach_time");
+                int nbSecteur = rs.getInt("nb_secteurs");
+                Direction direction = new Direction(rs.getString("direction"));
+                Equipment equipment = new Equipment(rs.getString("equipment"));
+                AverageRoutNumber averageRoutNumber = new AverageRoutNumber(rs.getString("averageRout"));
+                EquipmentQuality quality = new EquipmentQuality(rs.getString("quality"));
+                RoutProfil profil = new RoutProfil(rs.getString("profil"));
+                Level max = new Level(rs.getString("maximumLevel"));
+                Level min = new Level(rs.getString("minimumLevel"));
+                RockType rockType = new RockType(rs.getString("rockType"));
+                ApprochType approchType = new ApprochType(rs.getString("approachType"));
+                Double latitudeP1 = rs.getDouble("latitude_P1");
+                Double longitudeP1 = rs.getDouble("longitude_P1");
+                Double latitudeP2 = rs.getDouble("latitude_P2");
+                Double longitudeP2 = rs.getDouble("longitude_P2");
+                boolean reseau4g = rs.getBoolean("reseau_4g");
+                boolean toilette = rs.getBoolean("toilette");
+                boolean water = rs.getBoolean("water");
+                boolean river = rs.getBoolean("river");
+                ClimbingSpot spot = new ClimbingSpot(idSpot,name,approachTime,averageHeight,nbSecteur,latitudeP1,longitudeP1,latitudeP2,longitudeP2,reseau4g,water,toilette,river,min,max,approchType,direction,equipment,quality,rockType,profil,averageRoutNumber);
+                allClimbingSpot.add(spot);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return allClimbingSpot;*/
         return null;
     }
 

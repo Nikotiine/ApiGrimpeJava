@@ -7,10 +7,15 @@ public class RoutProfil {
     public RoutProfil() {
     }
 
-    public RoutProfil(int idRoutProfil, String profil) {
+    public RoutProfil(String profil) {
         this();
-        this.idRoutProfil = idRoutProfil;
         this.profil = profil;
+    }
+
+    public RoutProfil(int idRoutProfil, String profil) {
+        this(profil);
+        this.idRoutProfil = idRoutProfil;
+
     }
 
     public int getIdRoutProfil() {

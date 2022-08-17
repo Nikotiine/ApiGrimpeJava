@@ -76,16 +76,15 @@ public class UserRouter {
     @Produces(MediaType.APPLICATION_JSON)
     public Response changePassword(@HeaderParam("Authorization") String token , @PathParam("id")int idUser, UserPassword passwords){
         ResponseJson res = new ResponseJson("Mot de passe modifier avec succes , Merci de vous reconnecter");
-
         String[] authorization = token.split("\\s");
         boolean acces = midlewareContoller.verifyToken(authorization[1],idUser);
+
         if(acces){
             try {
                 userController.changePassword(passwords,idUser);
             } catch (ApiException e) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
             }
-
         }
         return Response.status(Response.Status.OK).entity(res).build();
     }
