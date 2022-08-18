@@ -9,7 +9,7 @@ public class DaoFactory {
     public static DAO<User> DaoUser(){return new UserImplJdbc();}
     public static DAO<ClimbingSpot> climbingSpotDAO(){return new ClimbingSpotImplJdbc();}
     public static LoginDao loginDao(){return new UserImplJdbc();}
-    public static JsonDao jsonDao(){return new ClimbingSpotDtoImplJdbc();
+    public static DtoDao jsonDao(){return new ClimbingSpotDtoImplJdbc();
     }
 
     public static DetailDao approchTypeDao(){return new ApprochTypeImplJdbc();}

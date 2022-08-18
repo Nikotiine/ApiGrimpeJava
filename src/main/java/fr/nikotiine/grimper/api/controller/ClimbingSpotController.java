@@ -6,15 +6,16 @@ import fr.nikotiine.grimper.api.bo.ClimbingSpotDto;
 import fr.nikotiine.grimper.api.bo.details.AllDetailList;
 import fr.nikotiine.grimper.api.dal.DAO;
 import fr.nikotiine.grimper.api.dal.DaoFactory;
-import fr.nikotiine.grimper.api.dal.JsonDao;
+import fr.nikotiine.grimper.api.dal.DtoDao;
 import fr.nikotiine.grimper.api.service.DetailService;
 
 import java.util.List;
 
 public class ClimbingSpotController {
+
     private DetailService service = DetailService.getInstance();
     private DAO<ClimbingSpot> climbingSpotDAO = DaoFactory.climbingSpotDAO();
-    private JsonDao jsonDao = DaoFactory.jsonDao();
+    private DtoDao dtoDao = DaoFactory.jsonDao();
     private static ClimbingSpotController instance;
     public static ClimbingSpotController getInstance(){
         if(instance == null){
@@ -34,10 +35,13 @@ public void createNewSpot(ClimbingSpot spot) throws ApiException {
         climbingSpotDAO.findOrCreate(spot);
 }
 public List<ClimbingSpotDto> getAllSpot(){
-        return jsonDao.getAllSpot();
+        return dtoDao.getAllSpot();
 }
 
     public ClimbingSpotDto getDetailSpot(int idSpot) {
-        return jsonDao.getOneSpot(idSpot);
+        return dtoDao.getOneSpot(idSpot);
     }
+    public List<String> getAllSpotNames(){
+        return dtoDao.getAllNameOfClimbingSpot();
+    };
 }

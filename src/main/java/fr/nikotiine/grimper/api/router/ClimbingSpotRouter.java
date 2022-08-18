@@ -31,10 +31,11 @@ public class ClimbingSpotRouter {
     public Response createNewSpot(@HeaderParam("Authorization") String token , @PathParam("id")int idUser, ClimbingSpot spot){
         String[] authorization = token.split("\\s");
         boolean acces = midlewareContoller.verifyToken(authorization[1],idUser);
-        ResponseJson res = new ResponseJson("Site ajouter");
+        ResponseJson res = null;
         if(acces){
             try {
                 controller.createNewSpot(spot);
+                res = new ResponseJson(spot.getIdSpot());
             } catch (ApiException e) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
             }
@@ -55,14 +56,19 @@ public class ClimbingSpotRouter {
         }
         return Response.status(Response.Status.OK).entity(allSpotList).build();
     }
-
+    @GET
     @Path("/index/{id : \\d}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDetailSpot(@PathParam("id")int idSpot){
         ClimbingSpotDto spot;
         spot = controller.getDetailSpot(idSpot);
         return Response.status(Response.Status.OK).entity(spot).build();
-
-
+    }
+    @GET
+    @Path("/names")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllSpotName(){
+        List<String> allName = controller.getAllSpotNames();
+        return Response.status(Response.Status.OK).entity(allName).build();
     }
 }

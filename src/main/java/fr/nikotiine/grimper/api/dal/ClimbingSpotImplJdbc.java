@@ -24,7 +24,6 @@ public class ClimbingSpotImplJdbc implements DAO<ClimbingSpot> {
             throw new ApiException(CodeErrorDal.SPOT_EXISTANT);
         }
         try(Connection cnx = ConnectionProvider.getConnection()) {
-            System.out.println("try spotimpl new");
             ps = cnx.prepareStatement(this.CREATE_SPOT,PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1,spot.getName());
             ps.setInt(2,spot.getIdMinimumLevel());
@@ -45,30 +44,22 @@ public class ClimbingSpotImplJdbc implements DAO<ClimbingSpot> {
                 ps.setDouble(16,spot.getLatitudeP2());
                 ps.setDouble(17,spot.getLongitudeP2());
             }else {
-
               ps.setNull(16, Types.NULL);
               ps.setNull(17,Types.NULL);
             }
-
             ps.setBoolean(18,spot.isReseau4g());
             ps.setBoolean(19,spot.isWater());
             ps.setBoolean(20,spot.isToilette());
             ps.setBoolean(21,spot.isRiver());
             ps.executeUpdate();
             rs = ps.getGeneratedKeys();
-
             if(rs.next()){
+                spot.setIdSpot(rs.getInt(1));
                 addSecteur(rs.getInt(1),spot.getSecteurs());
             }
-
-
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
 
@@ -80,42 +71,7 @@ public class ClimbingSpotImplJdbc implements DAO<ClimbingSpot> {
 
     @Override
     public List<ClimbingSpot> findAll() {
-      /*  PreparedStatement ps = null;
-        ResultSet rs = null;
-        List<ClimbingSpot> allClimbingSpot =new ArrayList<>();
-        try(Connection cnx = ConnectionProvider.getConnection()) {
-            ps = cnx.prepareStatement(this.FIND_ALL_SPOT);
-            rs = ps.executeQuery();
-            while (rs.next()){
-                int idSpot = rs.getInt("id_spot");
-                String name = rs.getString("name");
-                int averageHeight = rs.getInt("average_height");
-                int approachTime = rs.getInt("approach_time");
-                int nbSecteur = rs.getInt("nb_secteurs");
-                Direction direction = new Direction(rs.getString("direction"));
-                Equipment equipment = new Equipment(rs.getString("equipment"));
-                AverageRoutNumber averageRoutNumber = new AverageRoutNumber(rs.getString("averageRout"));
-                EquipmentQuality quality = new EquipmentQuality(rs.getString("quality"));
-                RoutProfil profil = new RoutProfil(rs.getString("profil"));
-                Level max = new Level(rs.getString("maximumLevel"));
-                Level min = new Level(rs.getString("minimumLevel"));
-                RockType rockType = new RockType(rs.getString("rockType"));
-                ApprochType approchType = new ApprochType(rs.getString("approachType"));
-                Double latitudeP1 = rs.getDouble("latitude_P1");
-                Double longitudeP1 = rs.getDouble("longitude_P1");
-                Double latitudeP2 = rs.getDouble("latitude_P2");
-                Double longitudeP2 = rs.getDouble("longitude_P2");
-                boolean reseau4g = rs.getBoolean("reseau_4g");
-                boolean toilette = rs.getBoolean("toilette");
-                boolean water = rs.getBoolean("water");
-                boolean river = rs.getBoolean("river");
-                ClimbingSpot spot = new ClimbingSpot(idSpot,name,approachTime,averageHeight,nbSecteur,latitudeP1,longitudeP1,latitudeP2,longitudeP2,reseau4g,water,toilette,river,min,max,approchType,direction,equipment,quality,rockType,profil,averageRoutNumber);
-                allClimbingSpot.add(spot);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return allClimbingSpot;*/
+
         return null;
     }
 
@@ -149,7 +105,6 @@ public class ClimbingSpotImplJdbc implements DAO<ClimbingSpot> {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try(Connection cnx = ConnectionProvider.getConnection()) {
-            System.out.println("secteur");
             ps = cnx.prepareStatement(this.ADD_SECTEUR);
             for (ClimbingSpotSecteur secteur:secteurs
                  ) {
@@ -157,8 +112,6 @@ public class ClimbingSpotImplJdbc implements DAO<ClimbingSpot> {
                 ps.setInt(2,spotId);
                 ps.executeUpdate();
             }
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

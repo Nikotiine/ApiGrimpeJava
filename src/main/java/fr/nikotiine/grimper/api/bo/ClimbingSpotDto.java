@@ -2,6 +2,8 @@ package fr.nikotiine.grimper.api.bo;
 
 import fr.nikotiine.grimper.api.bo.details.*;
 
+import java.util.List;
+
 public class ClimbingSpotDto {
     int idSpot;
     String name;
@@ -26,6 +28,8 @@ public class ClimbingSpotDto {
     RoutProfil routProfil ;
     AverageRoutNumber averageRoutNumber;
 
+    List<ClimbingSpotSecteur> secteurs;
+
     public ClimbingSpotDto(int idSpot, String name, int approachTime, int averageHeight, int nbSecteur, Double latitudeP1, Double longitudeP1, Double latitudeP2, Double longitudeP2, boolean reseau4g, boolean water, boolean toilette, boolean river, Level minimumLevel, Level maximumLevel, ApprochType approchType, Direction direction, Equipment equipment, EquipmentQuality equipmentQuality, RockType rockType, RoutProfil routProfil, AverageRoutNumber averageRoutNumber) {
         this.idSpot = idSpot;
         this.name = name;
@@ -49,6 +53,11 @@ public class ClimbingSpotDto {
         this.rockType = rockType;
         this.routProfil = routProfil;
         this.averageRoutNumber = averageRoutNumber;
+    }
+
+    public ClimbingSpotDto(int idSpot, String name, int approachTime, int averageHeight, int nbSecteur, Double latitudeP1, Double longitudeP1, Double latitudeP2, Double longitudeP2, boolean reseau4g, boolean water, boolean toilette, boolean river, Level minimumLevel, Level maximumLevel, ApprochType approchType, Direction direction, Equipment equipment, EquipmentQuality equipmentQuality, RockType rockType, RoutProfil routProfil, AverageRoutNumber averageRoutNumber, List<ClimbingSpotSecteur> secteurs) {
+        this(idSpot,name,approachTime,averageHeight,nbSecteur,latitudeP1,longitudeP1,latitudeP2,longitudeP2,reseau4g,water,toilette,river,minimumLevel,maximumLevel,approchType,direction,equipment,equipmentQuality,rockType,routProfil,averageRoutNumber);
+        this.secteurs = secteurs;
     }
 
     public int getIdSpot() {
@@ -225,5 +234,13 @@ public class ClimbingSpotDto {
 
     public void setAverageRoutNumber(AverageRoutNumber averageRoutNumber) {
         this.averageRoutNumber = averageRoutNumber;
+    }
+
+    public List<ClimbingSpotSecteur> getSecteurs() {
+        return secteurs;
+    }
+
+    public void setSecteurs(List<ClimbingSpotSecteur> secteurs) {
+        this.secteurs = secteurs;
     }
 }

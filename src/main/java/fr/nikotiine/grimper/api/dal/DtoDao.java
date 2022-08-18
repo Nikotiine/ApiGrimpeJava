@@ -4,8 +4,10 @@ import fr.nikotiine.grimper.api.bo.ClimbingSpotDto;
 
 import java.util.List;
 
-public interface JsonDao {
+public interface DtoDao {
     List<ClimbingSpotDto> getAllSpot();
 
     ClimbingSpotDto getOneSpot(int idSpot);
+
+    List<String> getAllNameOfClimbingSpot();
 }
