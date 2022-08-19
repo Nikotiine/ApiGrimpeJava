@@ -60,6 +60,7 @@ public class ClimbingSpotDtoImplJdbc implements DtoDao {
 
     @Override
     public ClimbingSpotDto getOneSpot(int idSpot) {
+        System.out.println(idSpot);
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<ClimbingSpotSecteur> secteurs = getSecteurOfSpot(idSpot);

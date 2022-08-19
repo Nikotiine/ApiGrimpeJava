@@ -36,6 +36,7 @@ public class ClimbingSpotRouter {
             try {
                 controller.createNewSpot(spot);
                 res = new ResponseJson(spot.getIdSpot());
+               
             } catch (ApiException e) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
             }
@@ -57,9 +58,10 @@ public class ClimbingSpotRouter {
         return Response.status(Response.Status.OK).entity(allSpotList).build();
     }
     @GET
-    @Path("/index/{id : \\d}")
+    @Path("/index/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDetailSpot(@PathParam("id")int idSpot){
+
         ClimbingSpotDto spot;
         spot = controller.getDetailSpot(idSpot);
         return Response.status(Response.Status.OK).entity(spot).build();

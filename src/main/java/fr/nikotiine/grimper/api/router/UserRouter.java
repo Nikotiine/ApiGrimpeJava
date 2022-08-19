@@ -27,7 +27,7 @@ public class UserRouter {
      * @param idUser Id envoye dans la requete http
      * @return Profil complet de l'utilisateur
      */
-    @Path("/me/{id : \\d}")
+    @Path("/me/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProfil(@HeaderParam("Authorization") String token , @PathParam("id")int idUser) {
@@ -47,7 +47,7 @@ public class UserRouter {
         }
     }
 
-    @Path("/edit/{id : \\d}")
+    @Path("/edit/{id}")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -70,7 +70,7 @@ public class UserRouter {
             return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
-    @Path("/new-password/{id : \\d}")
+    @Path("/new-password/{id}")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
